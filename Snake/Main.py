@@ -5,11 +5,11 @@ from random import randrange as rnd
 class Snake:
     """docstring"""
 
-    def __init__(self, length, coords):
+    def __init__(self, start_length, coords):
         """Constructor"""
 
         # длина змеи
-        self.length = length
+        self.length = start_length
 
         # координаты положения головы змеи
         self.x = coords[0]
@@ -56,8 +56,7 @@ class Map:
         self.y_start = 20
 
         # размер квадратов сетки
-        self.x_size = 20
-        self.y_size = 20
+        self.rectangle_size = 20
 
         self.canvas = canvas
 
@@ -66,9 +65,20 @@ class Map:
         # отрисовка сетки
         for i in range(self.length):
             for j in range(self.width):
-                self.canvas.create_rectangle(self.x_start + self.x_size * i, self.y_start + self.y_size * j,
-                                             self.x_start + self.x_size * (i + 1), self.y_start + self.y_size * (j + 1),
+                self.canvas.create_rectangle(self.x_start + self.rectangle_size * i,
+                                             self.y_start + self.rectangle_size * j,
+                                             self.x_start + self.rectangle_size * (i + 1),
+                                             self.y_start + self.rectangle_size * (j + 1),
                                              outline="black", fill=None)
+
+    def new_bonus(self):
+        coord_x = rnd(self.length)
+        coord_y = rnd(self.width)
+        self.canvas.create_rectangle(self.x_start + self.rectangle_size * coord_x,
+                                     self.y_start + self.rectangle_size * coord_y,
+                                     self.x_start + self.rectangle_size * (coord_x + 1),
+                                     self.y_start + self.rectangle_size * (coord_y + 1),
+                                     outline="black", fill="green")
 
 
 def main():
@@ -82,7 +92,9 @@ def main():
     canvas = Canvas(root)
 
     map = Map(canvas, map_size)
-    snake = Snake(length=1, coords=start_coords)
+    map.new_bonus()
+
+    snake = Snake(start_length=2, coords=start_coords)
 
     map.paint()
 
